@@ -1,0 +1,15 @@
+version: '3'
+services:
+  northwind-database:
+    image: benjiecheong/northwind-database:1.0.0
+    container_name: northwind-database
+    ports:
+      - "3306:3306"
+    volumes:
+      - nw-vol:/var/lib/mysql
+volumes:
+  nw-vol:
+networks:
+  default:
+    external:
+      name: nwnet

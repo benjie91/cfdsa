@@ -1,0 +1,13 @@
+version: '3'
+services:
+  northwind-app:
+    image: benjiecheong/northwind-app:1.0.0
+    container_name: northwind-app
+    ports:
+      - "3000:3000"
+    environment:
+      DB_HOST: northwind-database
+networks:
+  default:
+    external:
+      name: nwnet

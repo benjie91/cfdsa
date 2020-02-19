@@ -1,0 +1,26 @@
+version: '3'
+services:
+  northwind-app:
+    image: benjiecheong/northwind-app:1.0.0
+    build:
+      context: ./server
+    container_name: northwind-app
+    ports:
+      - "80:3000"
+    environment:
+      DB_HOST: northwind-database
+    networks:
+      - nwnet
+  northwind-database:
+    image: benjiecheong/northwind-database:1.0.0
+    build:
+      context: ./database
+    container_name: northwind-database
+    volumes:
+      - nwvol:/var/lib/mysql
+    networks:
+      - nwnet
+volumes:
+  nwvol:
+networks:
+  nwnet:

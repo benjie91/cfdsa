@@ -1,0 +1,23 @@
+# Base image from which we are pulling from
+FROM node:latest
+
+# define some environment variables
+ENV APP_PORT=3000 APP_ROOT=/app
+
+#Create app directory and go inside the directory
+WORKDIR ${APP_ROOT}
+
+ADD main.js .
+ADD package.json .
+ADD package-lock.json .
+ADD public public
+ADD views views
+
+RUN npm install
+
+HEALTHCHECK --interval=30s --timeout=5s --start-period=5s --retries=3 \
+    CMD curl -s -f http://localhost:${APP_PORT}/health > /dev/null || exit 1
+
+EXPOSE 8080
+
+ENTRYPOINT ["node", "main.js"]
