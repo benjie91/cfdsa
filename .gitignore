@@ -4,3 +4,6 @@ angular
 .angulardoc.json
 
 .idea
+
+# Workshop 02
+simple-cluster-kubeconfig.yaml

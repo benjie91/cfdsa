@@ -1,0 +1,36 @@
+export KUBECONFIG_FILE_LOCATION="/home/benjie/Documents/Workshops/Containers for Deploying and Scaling Apps/Exercises/cfdsa/workshop02/simple-cluster-kubeconfig.yaml"
+export KUBECONFIG="${KUBECONFIG_FILE_LOCATION}"
+
+# Sample Kubectl Commands
+kubectl get node
+kubectl cluster-info
+kubectl get namespace -n <namespace>
+kubectl get pod/<pod> -n <namespace> -o yaml
+kubectl describe pod/<pod> -n <namespace>
+kubectl get deployment -n <namespace>
+kubectl get service -n <namespace>
+kubectl get <resourcetype> -A
+kubectl create namespace myns
+kubectl delete namespace/myns
+
+kubectl apply -f fortune.yml
+kubectl delete -f fortune.yml
+kubectl edit po/fortune-pod     # Never do that
+
+kubectl port-forward po/fortune-pod -n fortune-system 8080:8080 # For testing in localhost
+
+kubectl delete -f deployment.yml
+kubectl get po,deploy -n fortune-system
+kubectl scale deploy/fortune-deployment --replicas=2 -n fortune-system
+
+# Other the the core group, all other api version need to specify the group (e.g. apps/v1)
+# - in yaml are array
+# Can put anything for labels
+# Labels are used in selection for deployment kind
+
+echo -n 04d85becdb7b29dcda59e77fed069795 | base64
+
+# Services
+# clusterip - within kubernetes cluster
+# nodeport - exposing port for every vm
+# loadbalancer - exposing a single ip
