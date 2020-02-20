@@ -1,0 +1,61 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mydb-configmap
+
+data:
+  MYSQL_DATABASE: northwind
+
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: mydb-secret
+
+data:
+  MYSQL_ROOT_PASSWORD: Y2hhbmdlaXQ=
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mydb
+  labels:
+    name: mydb-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: mydb-pod
+  template:
+    metadata:
+      labels:
+        name: mydb-pod
+    spec:
+      volumes:
+        - name: mydb-vol
+          persistentVolumeClaim:
+            claimName: mydb-pvc
+#      initContainers:
+#        - name: scrubc
+#          image: busybox
+#          command: ["/bin/sh", "-c", "test -e /scrub && rm -rf /scrub/..?* /scrub/.[!.]* /scrub/*  && test -z \"$(ls -A /scrub)\" || exit 1"]
+#          volumeMounts:
+#            - mountPath: /scrub
+#              name: mydb-vol
+      containers:
+        - name: mydb-container
+          image: stackupiss/northwind-db:v1
+          imagePullPolicy: Always
+          ports:
+            - name: mydb-port
+              containerPort: 3306
+          envFrom:
+            - configMapRef:
+                name: mydb-configmap
+            - secretRef:
+                name: mydb-secret
+#          volumeMounts:
+#            - mountPath: /var/lib/mysql
+#              name: mydb-vol

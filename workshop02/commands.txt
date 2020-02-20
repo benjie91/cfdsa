@@ -27,6 +27,7 @@ kubectl scale deploy/fortune-deployment --replicas=2 -n fortune-system
 # - in yaml are array
 # Can put anything for labels
 # Labels are used in selection for deployment kind
+# matchLabels is AND expression
 
 echo -n 04d85becdb7b29dcda59e77fed069795 | base64
 

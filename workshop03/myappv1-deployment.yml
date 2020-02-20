@@ -1,0 +1,51 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: myappv1-configmap
+data:
+  DB_HOST: mydb-svc.default.svc.cluster.local
+  DB_PORT: "3306"
+  DB_USER: root
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: myappv1-deployment
+  labels:
+    name: myappv1-deployment
+    version: v1
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      name: myappv1-pod
+  template:
+    metadata:
+      labels:
+        name: myappv1-pod
+    spec:
+      containers:
+        - name: myappv1-container
+          image: stackupiss/northwind-app:v1
+          imagePullPolicy: Always
+          ports:
+            - name: myappv1-http
+              containerPort: 3000
+          env:
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mydb-secret
+                  key: MYSQL_ROOT_PASSWORD
+            - name: INSTANCE_IP_ADDRESS
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+          envFrom:
+            - configMapRef:
+                name: myappv1-configmap
+          resources:
+            requests:
+              cpu: 100m
+              memory: 16Mi
