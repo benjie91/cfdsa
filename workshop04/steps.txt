@@ -1,0 +1,21 @@
+export KUBECONFIG_FILE_LOCATION="/home/benjie/Documents/Workshops/Containers for Deploying and Scaling Apps/Exercises/cfdsa/workshop02/simple-cluster-kubeconfig.yaml"
+export KUBECONFIG="${KUBECONFIG_FILE_LOCATION}"
+
+# Downloading istio
+curl -L https://istio.io/downloadIstio | sh -
+cd istio-1.4.5/ && export PATH=$PWD/bin:$PATH
+
+# Applying istio into kubecluster
+istioctl manifest apply --set profile=demo
+
+# Get custom resource destination
+kubectl get crds
+
+###########################################################################
+
+
+istioctl kube-inject -f deploy-svc.yaml -o deploy-svc-injected.yaml
+kubectl apply -f deploy-svc-injected.yaml
+kubectl apply -f <($istioctl kube-inject -f deploy-svc.yaml)
+
+# katacoda - by oreilly
