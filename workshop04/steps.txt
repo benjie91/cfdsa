@@ -14,8 +14,10 @@ kubectl get crds
 ###########################################################################
 
 
-istioctl kube-inject -f deploy-svc.yaml -o deploy-svc-injected.yaml
+istioctl kube-inject -f weather-application.yml -o weather-application-ingested.yml
 kubectl apply -f deploy-svc-injected.yaml
 kubectl apply -f <($istioctl kube-inject -f deploy-svc.yaml)
+
+kubectl apply -f weather-application-ingested.yml
 
 # katacoda - by oreilly
