@@ -8,3 +8,6 @@ angular
 # Workshop 02
 simple-cluster-kubeconfig.yaml
 model
+
+# Workshop 04
+istio-1.4.5
